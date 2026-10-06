@@ -26,6 +26,23 @@
 .menubar-project-name {
   color: var(--text-dim);
   font-size: var(--ui-font-size-compact);
+  cursor: pointer;
+}
+
+.menubar-project-name-input {
+  padding: 2px 6px;
+  background: var(--bg-canvas);
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: var(--ui-font-size-compact);
+  font-family: inherit;
+}
+
+.menubar-project-name-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 .menubar-actions {

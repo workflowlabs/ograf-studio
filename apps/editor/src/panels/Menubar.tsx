@@ -43,6 +43,7 @@ export function Menubar({
   onToggleDockPane?: (pane: DockPaneId) => void;
 }) {
   const projectName = useProjectStore((s) => s.project.name);
+  const setProjectMeta = useProjectStore((s) => s.setProjectMeta);
   const detached = useDetachedWindows();
   const newProject = useProjectStore((s) => s.newProject);
   const loadProject = useProjectStore((s) => s.loadProject);
@@ -59,8 +60,11 @@ export function Menubar({
   const [remoteBusy, setRemoteBusy] = useState(false);
   const [editMenuOpen, setEditMenuOpen] = useState(false);
   const [windowMenuOpen, setWindowMenuOpen] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editingNameValue, setEditingNameValue] = useState(projectName);
   const editMenuRef = useRef<HTMLDivElement>(null);
   const windowMenuRef = useRef<HTMLDivElement>(null);
+  const projectNameInputRef = useRef<HTMLInputElement>(null);
   const history = useSyncExternalStore(subscribeHistory, getHistorySnapshot, getHistorySnapshot);
   const agentConnected = useAgentBridgeStatus((state) => state.connected);
   const agentActivity = useAgentBridgeStatus((state) => state.activity);
@@ -85,6 +89,38 @@ export function Menubar({
       document.removeEventListener('keydown', closeOnEscape);
     };
   }, [editMenuOpen, windowMenuOpen]);
+
+  useEffect(() => {
+    if (isEditingName) {
+      projectNameInputRef.current?.focus();
+      projectNameInputRef.current?.select();
+    }
+  }, [isEditingName]);
+
+  useEffect(() => {
+    setEditingNameValue(projectName);
+  }, [projectName]);
+
+  const handleSaveProjectName = () => {
+    const trimmedName = editingNameValue.trim();
+    if (trimmedName && trimmedName !== projectName) {
+      setProjectMeta({ name: trimmedName });
+    }
+    setIsEditingName(false);
+  };
+
+  const handleCancelProjectNameEdit = () => {
+    setEditingNameValue(projectName);
+    setIsEditingName(false);
+  };
+
+  const handleProjectNameKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSaveProjectName();
+    } else if (event.key === 'Escape') {
+      handleCancelProjectNameEdit();
+    }
+  };
 
   const applyUndo = (steps = 1) => {
     const label = history.past.at(-1)?.label;
@@ -227,7 +263,25 @@ export function Menubar({
         <OgrafLogo />
         Studio
       </span>
-      <span className="menubar-project-name">{projectName}</span>
+      {isEditingName ? (
+        <input
+          ref={projectNameInputRef}
+          type="text"
+          className="menubar-project-name-input"
+          value={editingNameValue}
+          onChange={(e) => setEditingNameValue(e.target.value)}
+          onBlur={handleSaveProjectName}
+          onKeyDown={handleProjectNameKeyDown}
+        />
+      ) : (
+        <span
+          className="menubar-project-name"
+          onDoubleClick={() => setIsEditingName(true)}
+          title="Double-click to rename"
+        >
+          {projectName}
+        </span>
+      )}
       <nav className="menubar-actions">
         <button type="button" onClick={handleNew}>
           New
