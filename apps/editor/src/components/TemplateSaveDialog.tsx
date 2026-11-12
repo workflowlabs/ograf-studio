@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import {
   getTotalFrames,
   projectThumbnailFrame,
@@ -7,11 +5,14 @@ import {
   templateThumbnailName,
   type Project,
 } from '@ograf-editor/scene-model';
-import { saveProjectSourceToFile, saveProjectToFile } from '../state/fileIO';
-import { OGrafExportCertificationError } from '../state/exportPackage';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useEditorWindow } from '../layout/EditorWindow';
-import { useMovableDialog } from './useMovableDialog';
+import { OGrafExportCertificationError } from '../state/exportPackage';
+import { saveProjectSourceToFile, saveProjectToFile } from '../state/fileIO';
+import { ExportToPI } from './ExportToPI';
 import './TemplateSaveDialog.css';
+import { useMovableDialog } from './useMovableDialog';
 
 export function TemplateSaveDialog({
   project,
@@ -282,6 +283,13 @@ export function TemplateSaveDialog({
                   ? 'Save .ogs…'
                   : 'Download .ogs'}
           </button>
+
+          <ExportToPI
+            project={snapshot}
+            composition={composition}
+            disabled={saving || rendering || !preview || !name.trim()}
+          />
+
         </div>
       </section>
     </div>,

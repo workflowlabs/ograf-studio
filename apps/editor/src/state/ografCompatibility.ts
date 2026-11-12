@@ -1,4 +1,3 @@
-import graphicRuntimeSource from '@ograf-editor/ograf-runtime/dist/graphic-runtime.js?raw';
 import {
   buildExportArtifactsWithRuntime,
   compileDescriptor,
@@ -7,6 +6,7 @@ import {
   type ExportArtifacts,
   type ExportProfile,
 } from '@ograf-editor/codegen';
+import graphicRuntimeSource from '@ograf-editor/ograf-runtime/dist/graphic-runtime.js?raw';
 import type {
   CompiledGraphicDescriptor,
   CompiledTransitionLogicDescriptor,
@@ -16,29 +16,29 @@ import type {
   ScheduledAction,
 } from '@ograf-editor/ograf-types';
 import {
-  lottiePlayerFrameAtTime,
   getElementShaderPaints,
+  lottiePlayerFrameAtTime,
   type Composition,
   type Element,
   type Project,
 } from '@ograf-editor/scene-model';
 import { createCertificationResourceUrls } from './certificationResources';
-import { awaitExportOperation } from './exportAbort';
 import {
   certificationMethodTiming,
   certificationPromiseWithTimeout,
   type CertificationMethodTiming,
 } from './certificationTiming';
 import {
-  coordinatedCertificationCases,
   coordinatedCertificationCanvasCounts,
+  coordinatedCertificationCases,
   coordinatedCertificationConflicts,
-  coordinatedCertificationSuccessErrors,
-  coordinatedCertificationRejectionErrors,
-  coordinatedCertificationOutputIdentity,
   coordinatedCertificationNextTransitionFrame,
+  coordinatedCertificationOutputIdentity,
+  coordinatedCertificationRejectionErrors,
+  coordinatedCertificationSuccessErrors,
   createCoordinatedStartupEvidence,
 } from './coordinatedCertification';
+import { awaitExportOperation } from './exportAbort';
 import {
   assertStudioRendererPluginsAllowed,
   rendererPluginAllowed,
@@ -247,7 +247,7 @@ export function createCertificationRealm(): CertificationRealm {
   frame.setAttribute('aria-hidden', 'true');
   frame.tabIndex = -1;
   frame.style.cssText =
-    'position:fixed;left:-100000px;top:-100000px;width:1px;height:1px;border:0;visibility:hidden;';
+    'position:fixed;left:0;top:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none;';
   document.body.appendChild(frame);
   const realmWindow = frame.contentWindow;
   const realmDocument = frame.contentDocument;
@@ -376,7 +376,7 @@ async function validateCoordinatedLifecycle(
   for (const renderType of modes) {
     signal?.throwIfAborted();
     const graphic = realm.document.createElement(tagName) as CallableGraphic;
-    graphic.style.cssText = 'position:fixed;left:-100000px;top:-100000px;visibility:hidden;';
+    graphic.style.cssText = 'position:fixed;left:0;top:0;opacity:0;pointer-events:none;';
     realm.document.body.appendChild(graphic);
     const call = async (
       method: keyof Graphic,
@@ -870,7 +870,7 @@ async function validateModuleAndLifecycle(
       signal?.throwIfAborted();
       const graphic = realm.document.createElement(tagName) as CallableGraphic;
       activeGraphic = graphic;
-      graphic.style.cssText = 'position:fixed;left:-100000px;top:-100000px;visibility:hidden;';
+      graphic.style.cssText = 'position:fixed;left:0;top:0;opacity:0;pointer-events:none;';
       realm.document.body.appendChild(graphic);
       const call = (method: keyof Graphic, params: unknown, extraKeys: string[] = []) =>
         callGraphicMethod(

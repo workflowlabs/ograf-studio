@@ -37,9 +37,9 @@ export const BUNDLED_STUDIO_PLUGINS = [
     kind: 'chart',
     version: '1.3.1',
     name: 'Chart.js renderer',
-    snapshotSha256: '7966be65e37e8c5fb6e6b7e5d5735120e6edd1821d6be84ad4b8fba9a822072e',
-    bundleSha256: '13846395ca0209fae830f54af9e16c33046bc10e3f44654a932a92f4ad938270',
-    filename: 'ograf.chartjs-1.3.1-13846395ca02.ogsplugin.zip',
-    bytes: 113196,
+    snapshotSha256: '07193901da452c9119e80288afdc8f93ca448052f072aec51ef3659c3f0c193c',
+    bundleSha256: 'c7a85595c9622f98c2f544ebee51db381debfde80b13a11f1a0c7bab002095bf',
+    filename: 'ograf.chartjs-1.3.1-c7a85595c962.ogsplugin.zip',
+    bytes: 113066,
   },
 ] as const;

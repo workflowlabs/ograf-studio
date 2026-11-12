@@ -1,10 +1,10 @@
-import { build, defineConfig, normalizePath, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
-import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { mkdir, rename, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { build, defineConfig, normalizePath, type Plugin } from 'vite';
 import { resolveBuildRevision } from './buildRevision.ts';
 
 const rootPackage = JSON.parse(
@@ -118,4 +118,5 @@ export default defineConfig({
   // Export embeds the runtime distribution as raw source. Rebuild it whenever its source changes
   // so a long-running editor dev session cannot preview newer code than it packages.
   plugins: [react(), keepExportRuntimeFresh()],
+  base: 'ograf.app',
 });
